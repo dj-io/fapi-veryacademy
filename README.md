@@ -9,11 +9,13 @@
 
 ### Getting Started
 - **mkdir `app-name`**
-- **start virtual env**
+- **start virtual env** *(pip installs deps globally, not at project level - creating venv will scope deps to this project or any project using this venv as the python interpretor, best for avoiding dep conflicts)*
     ```sh
     python3 -m venv venv
     source venv/bin/activate
     ```
+   -  **notes**
+        - press `CMD + SHIFT + P` to open command pallette, type in select: python interpretor to manually select the directory venv if deps are not recognized automatically
 - **Install the needed dependencies**
     - **REST**: pip3 install `fastapi` `fastapi-sqlalchemy` `pydantic` `alembic` *`psycopg2-binary`* `uvicorn[standard]` `python-dotenv` `pyJWT` `bcrypt`
     - **GRAPHQL**: pip3 install `fastapi` `uvicorn[standard]` `alembic` `psycopg2-binary` `python-dotenv` `pyJWT` `bcrypt` `starlette-graphene3` `rsa` `cryptography`
@@ -364,7 +366,7 @@
 
 - **Create an keyGeneratorUtil.py file**
 ```python
-    Vew examples in security/key_generator.py
+    View examples in security/key_generator.py
 ```
 
 - **Create an auth.py file**
@@ -457,7 +459,7 @@ class Login(graphene.Mutation):
             access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
             access_token = create_access_token(data={"user": username}, expires_delta=access_token_expires)
             ok = True
-            return Login(token=Token(access_token=access_token, token_type="bearer"))
+            return Login(token=Token(token=access_token, token_type="bearer"))
         else:
             ok = False
             return Login(ok=ok)
@@ -494,6 +496,7 @@ class Login(graphene.Mutation):
     - docker-compose run <app-container-name> alembic -c <subdir>/alembic.ini upgrade head
     ```
     - In alembic.ini change the script location `script_location = <sub-dir>/alembic`
+    - In docker-compose change the app command `command: bash -c "alembic -c <subdir>/alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload`
 
 - **test certs volume exists and keys are generated and persist**
     - run `docker volume ls` should output: `local     myproject_rsa_keys`

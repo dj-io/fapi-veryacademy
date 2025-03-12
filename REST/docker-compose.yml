@@ -5,7 +5,7 @@ version: "3.8" # version of code to utilize in this file
 
 services: # identify what we want docker to run
   db: # service name
-    container_name: very_fapi_db
+    container_name: ${DB_CONTAINER_NAME}
     image: postgres # downloads an image (this can be thought of as a install disk, each container type will need a image type)
     restart: always # if the container fails or closes down it will automatically run the container again
     ports: # the only way to access what is in our container we must set a port (works as usually sevrver ports do):
@@ -27,7 +27,7 @@ services: # identify what we want docker to run
       - db
 
   app: # app service name
-    container_name: app #naming the container
+    container_name: ${APP_CONTAINER_NAME} #naming the container
     build: . # where to build the app from
     command: bash -c "alembic upgrade && uvicorn main:app --host 0.0.0.0 --port 8000 --reload" # checks for any new migrations/runs app on container
     volumes:

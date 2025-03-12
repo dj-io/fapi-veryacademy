@@ -1,5 +1,5 @@
 # get image we want
-FROM python:3.12-slim
+FROM python:3.12-alpine
 # set env variables
 ENV PYTHONUNBUFFERED=1
 # create working directory for our app
